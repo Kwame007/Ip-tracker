@@ -531,19 +531,23 @@ const App = class {
         // draw map
         this._getCurrentLocation();
         // request
-        this._showIpInformation();
+        // this._showIpInformation();
         document.querySelector("button").addEventListener("click", this._showIpInformation.bind(this));
     }
-    // request method
-    async _request(url = "https://geos.ipify.org/api/v2/country,city?apiKey=at_poCCdRbBxUw4qxilYRLhRXy3eWzzu&domain=google.com") {
+    // request method {with default url}
+    async _request(url = "https://geos.ipify.org/api/v2/country,city?apiKey=at_poCCdRbBxUw4qxilYRLhRXy3eWzzu&domain") {
         try {
             const response = await fetch(url);
             const data = response.json();
-            //
+            //set request data value = data
             this.#requestData = data;
-            return data;
+            // returns an object {data return a promise}
+            return {
+                data,
+                response
+            };
         } catch (error) {
-            console.log(error.message);
+            return error.message;
         }
     }
     // get user current location
@@ -555,13 +559,6 @@ const App = class {
     async _currentPosition(position) {
         // get current position data
         const { coords: { latitude , longitude  } ,  } = position;
-        // // destructure data
-        // const {
-        //   location: { city, lat, lng },
-        //   as: { name },
-        //   ip,
-        // } = await this.#requestData;
-        // console.log(city, lat, lng, name);
         // map constructor
         this.#map = L.map("map").setView([
             latitude,
@@ -570,7 +567,7 @@ const App = class {
         L.tileLayer("https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png", {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(this.#map);
-        // rebder marker
+        // render marker
         this._renderMarkerHelper(this.#requestData);
     }
     // show ip information and location on map
@@ -578,11 +575,16 @@ const App = class {
         try {
             // select input element
             const inputValue = document.querySelector("#ip");
-            // request response data
-            const data = await this._request(`https://geo.ipify.org/api/v2/country,city?apiKey=at_F7Q28Y66u3qHW0cluaRFyGytbOVyI&domain=${inputValue.value}`);
-            console.log(data);
+            // request response data {returns a promise}
+            const resData = await this._request(`https://geo.ipify.org/api/v2/country,city?apiKey=at_F7Q28Y66u3qHW0cluaRFyGytbOVyI&domain=${inputValue.value}`);
+            // check for valid domain
+            resData.response.ok || new Error(this.showError(errror.message, "error"));
+            // {IP data}
+            const data = await resData.data;
             // destructure data from { data object}
             const { location: { region , timezone , lat , lng  } , ip , isp ,  } = data;
+            // check if input is empty
+            if (!inputValue.value) throw new Error("Enter an IP or Domain 🤔");
             document.querySelector(".map-info").innerHTML = `
     
             <div class="info">
@@ -595,17 +597,19 @@ const App = class {
             </div>
             <div class="info">
               <span class="info-title">Time Zone</span><br />
-              <span class="info-text">${timezone}</span>
+              <span class="info-text">UTC ${timezone}</span>
             </div>
             <div class="info">
               <span class="info-title">ISP</span><br />
               <span class="info-text">${isp} 😎</span>
             </div>
     `;
+            // clear input field
+            inputValue.value = "";
             // render maker
             this._renderMarkerHelper(this.#requestData);
         } catch (error) {
-            console.log(error);
+            this.showError(error.message, "error");
         }
     }
     // render marker
@@ -638,14 +642,13 @@ const App = class {
             autoClose: false,
             closeOnClick: false,
             className: `pop-up`
-        })).setPopupContent(`<div class='pop-up'><div> name : ${data.name}</div><small>ip : ${data.ip} 🔍</small><small>location : ${data.city} 🌁</small></div>`).openPopup();
+        })).setPopupContent(`<div class='pop-up'><div> name : ${data.name}</div><small>ip : ${data.ip} 🔍</small><small>location : ${data.city} 🌁</small> <span class='pulse'></span></div>`).openPopup();
     }
     // render marker helper {helper function for the renderMaker function (provides the rquest data)}
     async _renderMarkerHelper(data) {
         // destructure data
         const { location: { city , lat , lng  } , as: { name  } , ip ,  } = await data;
-        console.log(city, lat, lng, name);
-        // rebder marker
+        // render marker
         this._renderMarker([
             lat,
             lng
@@ -654,6 +657,23 @@ const App = class {
             city,
             ip
         });
+    }
+    // show error message
+    showError(message, className) {
+        // create div element
+        const messageDiv = document.createElement("div");
+        // add class
+        messageDiv.classList.add(className);
+        // add text content
+        messageDiv.textContent = message;
+        // sibling
+        const sibling = document.querySelector(".input-group");
+        // insert
+        sibling.insertAdjacentElement("beforebegin", messageDiv);
+        // remove error after 3s
+        setTimeout(()=>{
+            messageDiv.remove();
+        }, 3000);
     }
 };
 const app = new App();

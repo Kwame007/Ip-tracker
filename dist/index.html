@@ -53,6 +53,7 @@
         border-top-left-radius: 10px;
         border-bottom-left-radius: 10px;
         border: none;
+        margin-top: 0.5rem;
       }
       .input-group input:focus {
         outline: none;
@@ -92,6 +93,21 @@
         font-size: 18px;
         font-weight: 500;
         color: #333;
+      }
+      /* shadow box */
+      .info-title-shadow {
+        padding: 0.6rem 2rem;
+      }
+      .info-text-shadow {
+        padding: 0 5rem;
+      }
+      .info-title-shadow,
+      .info-text-shadow {
+        background-color: #e6e3e352;
+        height: 20px;
+        border-radius: 20px;
+        display: inline-block;
+        animation: shadow infinite;
       }
       .pop-up {
         font-weight: 900;
@@ -137,6 +153,34 @@
         margin-top: -5px;
         background-color: #fff;
       }
+      /* utility */
+      .error {
+        max-width: 30%;
+        margin: auto;
+        background: #ffb2a6;
+        color: #fff;
+        font-weight: 500;
+        padding: 0.8rem;
+        border-radius: 10px;
+      }
+      .pulse {
+        width: 150px;
+        height: 50px;
+        background-color: #fff;
+        border-radius: 50%;
+      }
+      @keyframes shadow {
+        0% {
+          background-color: rgb(165, 79, 79);
+        }
+
+        50% {
+          background-color: rgb(31, 23, 23);
+        }
+        100% {
+          background-color: #e6e3e352;
+        }
+      }
       /* large screens */
       @media (min-width: 568px) {
         .container {
@@ -163,7 +207,7 @@
           align-items: center;
           width: 100%;
           min-height: 180px;
-          top: 50px;
+          top: 20px;
           text-align: justify;
         }
         .info {
@@ -190,23 +234,26 @@
             <input type="text" name="ip" id="ip" placeholder="Search for any IP of Domain"><button>
               <img src="/icon-arrow.0b8a787e.svg" alt="" class="map-btn">
             </button>
+            <!-- info -->
+            <small style="display: block; margin: 0.5rem 0 0 0; color: #fff">Built with ❤️ by
+              <a href="https://github.com/Kwame007/Ip-tracker" style="color: #ccc; font-weight: 600">@kwame007</a></small>
           </div>
           <div class="map-info">
             <div class="info">
-              <span class="info-title">Ip Address</span><br>
-              <span class="info-text">190.234.000</span>
+              <span class="info-title-shadow"></span><br>
+              <span class="info-text-shadow"></span>
             </div>
             <div class="info">
-              <span class="info-title">Location</span><br>
-              <span class="info-text">Accra</span>
+              <span class="info-title-shadow"></span><br>
+              <span class="info-text-shadow"></span>
             </div>
             <div class="info">
-              <span class="info-title">Time Zone</span><br>
-              <span class="info-text">UTC - 05:00</span>
+              <span class="info-title-shadow"></span><br>
+              <span class="info-text-shadow"></span>
             </div>
             <div class="info">
-              <span class="info-title">ISP</span><br>
-              <span class="info-text">Star-Link X</span>
+              <span class="info-title-shadow"></span><br>
+              <span class="info-text-shadow"></span>
             </div>
           </div>
         </div>
