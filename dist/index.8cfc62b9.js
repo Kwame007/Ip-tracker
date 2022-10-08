@@ -571,8 +571,9 @@ const App = class {
         this._renderMarkerHelper(this.#requestData);
     }
     // show ip information and location on map
-    async _showIpInformation() {
+    async _showIpInformation(e) {
         try {
+            e.preventDefault();
             // select input element
             const inputValue = document.querySelector("#ip");
             // request response data {returns a promise}
@@ -646,17 +647,21 @@ const App = class {
     }
     // render marker helper {helper function for the renderMaker function (provides the rquest data)}
     async _renderMarkerHelper(data) {
-        // destructure data
-        const { location: { city , lat , lng  } , as: { name  } , ip ,  } = await data;
-        // render marker
-        this._renderMarker([
-            lat,
-            lng
-        ], {
-            name,
-            city,
-            ip
-        });
+        try {
+            // destructure data
+            const { location: { city , lat , lng  } , as: { name  } , ip ,  } = await data;
+            // render marker
+            this._renderMarker([
+                lat,
+                lng
+            ], {
+                name,
+                city,
+                ip
+            });
+        } catch (error) {
+            this.showError(error.message, "error");
+        }
     }
     // show error message
     showError(message, className) {
@@ -676,6 +681,7 @@ const App = class {
         }, 3000);
     }
 };
+// {instantiate app class}
 const app = new App();
 
 },{"leaflet":"iFbO2","leaflet/dist/leaflet.css":"6JhOO"}],"iFbO2":[function(require,module,exports) {

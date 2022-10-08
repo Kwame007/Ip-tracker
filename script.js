@@ -66,8 +66,9 @@ const App = class {
   }
 
   // show ip information and location on map
-  async _showIpInformation() {
+  async _showIpInformation(e) {
     try {
+      e.preventDefault();
       // select input element
       const inputValue = document.querySelector("#ip");
 
@@ -152,15 +153,19 @@ const App = class {
 
   // render marker helper {helper function for the renderMaker function (provides the rquest data)}
   async _renderMarkerHelper(data) {
-    // destructure data
-    const {
-      location: { city, lat, lng },
-      as: { name },
-      ip,
-    } = await data;
+    try {
+      // destructure data
+      const {
+        location: { city, lat, lng },
+        as: { name },
+        ip,
+      } = await data;
 
-    // render marker
-    this._renderMarker([lat, lng], { name, city, ip });
+      // render marker
+      this._renderMarker([lat, lng], { name, city, ip });
+    } catch (error) {
+      this.showError(error.message, "error");
+    }
   }
 
   // show error message

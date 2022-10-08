@@ -67,6 +67,7 @@
         background-color: #000;
         border-top-right-radius: 10px;
         border-bottom-right-radius: 10px;
+        cursor: pointer;
       }
       .map-info {
         background-color: #fff;
@@ -230,14 +231,16 @@
       <header class="map-header">
         <div class="container">
           <h1 class="container-title">IP Address Tracker 📍🗺</h1>
-          <div class="input-group">
-            <input type="text" name="ip" id="ip" placeholder="Search for any IP of Domain"><button>
-              <img src="/icon-arrow.0b8a787e.svg" alt="" class="map-btn">
-            </button>
-            <!-- info -->
-            <small style="display: block; margin: 0.5rem 0 0 0; color: #fff">Built with ❤️ by
-              <a href="https://github.com/Kwame007/Ip-tracker" style="color: #ccc; font-weight: 600">@kwame007</a></small>
-          </div>
+          <form>
+            <div class="input-group">
+              <input type="text" name="ip" id="ip" placeholder="Search for any IP of Domain"><button type="submit">
+                <img src="/icon-arrow.0b8a787e.svg" alt="" class="map-btn">
+              </button>
+              <!-- info -->
+              <small style="display: block; margin: 0.5rem 0 0 0; color: #fff">Built with ❤️ by
+                <a href="https://github.com/Kwame007/Ip-tracker" style="color: #ccc; font-weight: 600">@kwame007</a></small>
+            </div>
+          </form>
           <div class="map-info">
             <div class="info">
               <span class="info-title-shadow"></span><br>
